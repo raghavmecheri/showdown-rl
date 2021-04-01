@@ -1,11 +1,15 @@
 import numpy as np
 from rl.agents.dqn import DQNAgent
+from rl.callbacks import WandbLogger
+import wandb
 
 class DeepQLearning:
 	def __init__(self, env_player, opponent, second_opponent, model, policy, memory, opt, metrics, gamma):
 		self.env_player = env_player
 		self.opponent = opponent
 		self.second_opponent = second_opponent
+
+		wandb.init(project="showdown-rl", tags=["tf2", "keras", "dqn"])
 
 		self.dqn = DQNAgent(
 			model=model,
@@ -36,24 +40,24 @@ class DeepQLearning:
 		env_player.play_against(
 			env_algorithm=self._eval,
 			opponent=self.opponent,
-			env_algorithm_kwargs={"dqn": self.dqn, "nb_episodes": eval_eps},
+			env_algorithm_kwargs={"dqn": self.dqn, "nb_episodes": eval_eps, "callbacks": [WandbLogger()]},
 			)
 
 		print("\nResults against eval/second player:")
 		env_player.play_against(
 			env_algorithm=self._eval,
 			opponent=self.second_opponent,
-			env_algorithm_kwargs={"dqn": self.dqn, "nb_episodes": eval_eps},
+			env_algorithm_kwargs={"dqn": self.dqn, "nb_episodes": eval_eps, "callbacks": [WandbLogger()]},
 			)
 
-	def _train(self, player, dqn, nb_steps):
-	    dqn.fit(player, nb_steps=nb_steps)
+	def _train(self, player, dqn, nb_steps, callbacks):
+	    dqn.fit(player, nb_steps=nb_steps, callbacks=cbs)
 	    player.complete_current_battle()
 
 
-	def _eval(self, player, dqn, nb_episodes):
+	def _eval(self, player, dqn, nb_episodes, callbacks=cbs):
 	    # Reset battle statistics
 	    player.reset_battles()
-	    dqn.test(player, nb_episodes=nb_episodes, visualize=False, verbose=False)
+	    dqn.test(player, nb_episodes=nb_episodes, callbacks=cbs, visualize=False, verbose=False)
 
 	    print("DQN Evaluation: %d victories out of %d episodes".format(player.n_won_battles, nb_episodes))
