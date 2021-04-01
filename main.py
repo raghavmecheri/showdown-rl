@@ -41,6 +41,6 @@ parser.add_argument("-c", "--config", required=True,
 
 if __name__ == "__main__":
 	args = parser.parse_args()
-	model, config = args["model"], args["config"]
+	model, config = args.model, args.config
 	f, c = fetch_model_trainer(model), fetch_config(config)
 	f(c)

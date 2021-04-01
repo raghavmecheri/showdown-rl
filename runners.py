@@ -10,17 +10,18 @@ from tensorflow.keras.optimizers import Adam
 
 def run_dqn(config):
     from algorithms import DeepQLearning
-	
-	env_player = SimpleRLPlayer(battle_format="gen8randombattle")
+    from players import SimpleRLPlayer
+
+    env_player = SimpleRLPlayer(battle_format="gen8randombattle")
     (opponent, second_opponent) = config
-    
+
     model = Sequential([
     	Dense(128, activation="elu", input_shape=(1, 10)),
     	Flatten(),
     	Dense(64, activation="elu"),
     	Dense(len(env_player.action_space), activation="linear")
     ])
-    
+
     policy = LinearAnnealedPolicy(
     	EpsGreedyQPolicy(),
     	attr="eps",

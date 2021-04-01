@@ -3,6 +3,7 @@ from rl.agents.dqn import DQNAgent
 from rl.callbacks import WandbLogger
 import wandb
 
+
 class DeepQLearning:
 	def __init__(self, env_player, opponent, second_opponent, model, policy, memory, opt, metrics, gamma):
 		self.env_player = env_player
