@@ -56,22 +56,28 @@ class MaxDamagePlayer(RandomPlayer):
         else:
             return self.choose_random_move(battle)
 
-class MinimaxPlayer(RandomPlayer):
-    def __init__(self, depth):
-        super().__init__()
-        self.depth = depth
+class RandomizedMaxDamagePlayer(RandomPlayer):
 
+    def choose_move(self, battle):
+        epsilon = 0.45
+        if battle.available_moves:
+            # Find the best move, but randomised
+            if np.random.uniform() < epsilon:
+                return self.choose_random_move(battle)
+            
+            best_move = max(battle.available_moves, key=lambda move: move.base_power)
+            return self.create_order(best_move)
+        else:
+            return self.choose_random_move(battle)
+
+class MinimaxPlayer(RandomPlayer):
     def choose_move(self, battle):
         pass
 
 class RandomisedMinimaxPlayer(RandomPlayer):
-    def __init__(self, depth, epsilon):
-        super().__init__()
-        self.depth = depth
-        self.epsilon = epsilon
-
     def choose_move(self, battle):
-        if np.random.uniform() < self.epsilon:
+        epsilon = 0.45
+        if np.random.uniform() < epsilon:
             super().choose_move(battle)
         else:
             pass

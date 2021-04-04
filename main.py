@@ -3,7 +3,7 @@ import numpy as np
 import tensorflow as tf
 
 from poke_env.player.random_player import RandomPlayer
-from players import SimpleRLPlayer, MaxDamagePlayer
+from players import SimpleRLPlayer, MaxDamagePlayer, RandomizedMaxDamagePlayer
 
 from runners import run_dqn
 
@@ -14,7 +14,9 @@ np.random.seed(42)
 
 TRAIN_CONFIGS = {
 	"rand_max": (RandomPlayer(battle_format="gen8randombattle"),
-		MaxDamagePlayer(battle_format="gen8randombattle"))
+		MaxDamagePlayer(battle_format="gen8randombattle")),
+	"max_max": (MaxDamagePlayer(battle_format="gen8randombattle"), MaxDamagePlayer(battle_format="gen8randombattle")),
+	"maxrand_max": (RandomizedMaxDamagePlayer(battle_format="gen8randombattle"), MaxDamagePlayer(battle_format="gen8randombattle"))
 }
 
 MODEL_TRAINER_CONFIGS = {
@@ -43,4 +45,4 @@ if __name__ == "__main__":
 	args = parser.parse_args()
 	model, config = args.model, args.config
 	f, c = fetch_model_trainer(model), fetch_config(config)
-	f(c)
+	f(c, config)

@@ -10,8 +10,6 @@ class DeepQLearning:
         self.opponent = opponent
         self.second_opponent = second_opponent
 
-        wandb.init(project="showdown-rl", tags=["tf2", "keras", "dqn"])
-
         self.dqn = DQNAgent(
             model=model,
             nb_actions=len(env_player.action_space),

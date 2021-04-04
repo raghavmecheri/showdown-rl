@@ -8,9 +8,13 @@ from tensorflow.keras.layers import Dense, Flatten
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
 
-def run_dqn(config):
+import wandb
+
+def run_dqn(config, config_name):
     from algorithms import DeepQLearning
     from players import SimpleRLPlayer
+
+    wandb.init(project="showdown-rl", tags=["tf2", "keras", "dqn", config_name])
 
     env_player = SimpleRLPlayer(battle_format="gen8randombattle")
     (opponent, second_opponent) = config
