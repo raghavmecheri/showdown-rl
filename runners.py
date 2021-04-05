@@ -13,6 +13,7 @@ import wandb
 def run_dqn(config, config_name):
     from algorithms import DeepQLearning
     from players import SimpleRLPlayer
+    from loggers import WandbLogger
 
     wandb.init(project="showdown-rl", tags=["tf2", "keras", "dqn", config_name])
 
@@ -39,6 +40,6 @@ def run_dqn(config, config_name):
     opt, metrics = Adam(lr=0.00025), ["mae"]
     gamma = 0.5
 
-    exp = DeepQLearning(env_player, opponent, second_opponent, model, policy, memory, opt, metrics, gamma)
+    exp = DeepQLearning(env_player, opponent, second_opponent, model, policy, memory, opt, metrics, gamma, WandbLogger)
     exp.train(10000)
     exp.eval(100)

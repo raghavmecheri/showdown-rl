@@ -1,14 +1,14 @@
 import numpy as np
 from rl.agents.dqn import DQNAgent
-from wandb.keras import WandbCallback
 import wandb
 
 
 class DeepQLearning:
-    def __init__(self, env_player, opponent, second_opponent, model, policy, memory, opt, metrics, gamma):
+    def __init__(self, env_player, opponent, second_opponent, model, policy, memory, opt, metrics, gamma, logger):
         self.env_player = env_player
         self.opponent = opponent
         self.second_opponent = second_opponent
+        self.logger = logger
 
         self.dqn = DQNAgent(
             model=model,
@@ -28,7 +28,7 @@ class DeepQLearning:
         self.env_player.play_against(
             env_algorithm=self._train,
             opponent=self.opponent,
-            env_algorithm_kwargs={"dqn": self.dqn, "nb_steps": train_steps, "callbacks": [WandbCallback()]},
+            env_algorithm_kwargs={"dqn": self.dqn, "nb_steps": train_steps, "callbacks": [self.logger()]},
         )
 
         if save == True:
@@ -40,7 +40,7 @@ class DeepQLearning:
             env_algorithm=self._eval,
             opponent=self.opponent,
             env_algorithm_kwargs={
-                "dqn": self.dqn, "nb_episodes": eval_eps, "callbacks": [WandbCallback()]},
+                "dqn": self.dqn, "nb_episodes": eval_eps, "callbacks": []},
         )
 
         print("\nResults against eval/second player:")
@@ -48,7 +48,7 @@ class DeepQLearning:
             env_algorithm=self._eval,
             opponent=self.second_opponent,
             env_algorithm_kwargs={
-                "dqn": self.dqn, "nb_episodes": eval_eps, "callbacks": [WandbCallback()]},
+                "dqn": self.dqn, "nb_episodes": eval_eps, "callbacks": []},
         )
 
     def _train(self, player, dqn, nb_steps, callbacks):
@@ -61,5 +61,6 @@ class DeepQLearning:
         dqn.test(player, nb_episodes=nb_episodes,
                  callbacks=callbacks, visualize=False, verbose=False)
 
-        print("DQN Evaluation: %d victories out of %d episodes".format(
+        print("DQN Evaluation: {} victories out of {} episodes".format(
             player.n_won_battles, nb_episodes))
+
