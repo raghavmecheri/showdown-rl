@@ -3,7 +3,7 @@ import numpy as np
 import tensorflow as tf
 
 from poke_env.player.random_player import RandomPlayer
-from players import SimpleRLPlayer, MaxDamagePlayer, RandomizedMaxDamagePlayer
+from players import SimpleRLPlayer, MaxDamagePlayer, RandomizedMaxDamagePlayer, MiniMaxDamagePlayer, RandomizedMiniMaxDamagePlayer
 
 from runners import run_dqn
 

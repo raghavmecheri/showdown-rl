@@ -57,7 +57,6 @@ class MaxDamagePlayer(RandomPlayer):
             return self.choose_random_move(battle)
 
 class RandomizedMaxDamagePlayer(RandomPlayer):
-
     def choose_move(self, battle):
         epsilon = 0.45
         if battle.available_moves:
@@ -72,12 +71,13 @@ class RandomizedMaxDamagePlayer(RandomPlayer):
 
 class MiniMaxDamagePlayer(RandomPlayer):
     def choose_move(self, battle):
-        pass
+        return super().choose_move(battle)
 
 class RandomizedMiniMaxDamagePlayer(RandomPlayer):
     def choose_move(self, battle):
         epsilon = 0.45
         if np.random.uniform() < epsilon:
-            super().choose_move(battle)
+            return super().choose_move(battle)
         else:
-            pass
+            return super().choose_move(battle)
+
