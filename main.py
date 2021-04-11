@@ -15,8 +15,11 @@ np.random.seed(42)
 TRAIN_CONFIGS = {
     "rand": RandomPlayer(battle_format="gen8randombattle"),
     "max": MaxDamagePlayer(battle_format="gen8randombattle"),
-    "maxrand": RandomizedMaxDamagePlayer(battle_format="gen8randombattle")
+    "maxrand": RandomizedMaxDamagePlayer(battle_format="gen8randombattle"),
+    "minimax": MiniMaxDamagePlayer(battle_format="gen8randombattle"),
+    "minimaxrand": RandomizedMiniMaxDamagePlayer(battle_format="gen8randombattle")
 }
+
 
 MODEL_TRAINER_CONFIGS = {
     "dqn": run_dqn

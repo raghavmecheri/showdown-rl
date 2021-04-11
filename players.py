@@ -64,17 +64,17 @@ class RandomizedMaxDamagePlayer(RandomPlayer):
             # Find the best move, but randomised
             if np.random.uniform() < epsilon:
                 return self.choose_random_move(battle)
-            
+
             best_move = max(battle.available_moves, key=lambda move: move.base_power)
             return self.create_order(best_move)
         else:
             return self.choose_random_move(battle)
 
-class MinimaxPlayer(RandomPlayer):
+class MiniMaxDamagePlayer(RandomPlayer):
     def choose_move(self, battle):
         pass
 
-class RandomisedMinimaxPlayer(RandomPlayer):
+class RandomizedMiniMaxDamagePlayer(RandomPlayer):
     def choose_move(self, battle):
         epsilon = 0.45
         if np.random.uniform() < epsilon:
