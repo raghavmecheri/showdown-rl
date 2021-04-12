@@ -5,16 +5,34 @@ from poke_env.player.random_player import RandomPlayer
 
 import numpy as np
 
+def _vectorise_stat(x):
+    vects = {
+    "atk": 0,
+    "def": 1,
+    "spa": 2,
+    "spd": 3,
+    "spe": 4
+    }
+    return vects[x]
+
 class SimpleRLPlayer(Gen8EnvSinglePlayer):
     def embed_battle(self, battle):
         # -1 indicates that the move does not have a base power
         # or is not available
         moves_base_power = -np.ones(4)
+        moves_base_status = np.zeros((4, 5))
+        moves_base_heal = np.zeros(4)
         moves_dmg_multiplier = np.ones(4)
+
         for i, move in enumerate(battle.available_moves):
+            moves_base_heal[i] = move.heal - move.recoil
+            if not move.boosts == None:
+                for k, v in move.boosts.items():
+                    moves_base_status[i][_vectorise_stat(k)] += v
+
             moves_base_power[i] = (
                 move.base_power / 100
-            )  # Simple rescaling to facilitate learning
+                )  # Simple rescaling to facilitate learning
             if move.type:
                 moves_dmg_multiplier[i] = move.type.damage_multiplier(
                     battle.opponent_active_pokemon.type_1,
@@ -34,7 +52,9 @@ class SimpleRLPlayer(Gen8EnvSinglePlayer):
             [
                 moves_base_power,
                 moves_dmg_multiplier,
-                [remaining_mon_team, remaining_mon_opponent],
+                moves_base_heal,
+                moves_base_status.flatten(order='C'),
+                [remaining_mon_team, remaining_mon_opponent],   
             ]
         )
 
