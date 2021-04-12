@@ -11,16 +11,15 @@ def _vectorise_stat(x):
     "def": 1,
     "spa": 2,
     "spd": 3,
-    "spe": 4
+    "spe": 4,
+    "accuracy": 5
     }
     return vects[x]
 
 class SimpleRLPlayer(Gen8EnvSinglePlayer):
     def embed_battle(self, battle):
-        # -1 indicates that the move does not have a base power
-        # or is not available
         moves_base_power = -np.ones(4)
-        moves_base_status = np.zeros((4, 5))
+        moves_base_status = np.zeros((4, 6))
         moves_base_heal = np.zeros(4)
         moves_dmg_multiplier = np.ones(4)
 
@@ -54,7 +53,7 @@ class SimpleRLPlayer(Gen8EnvSinglePlayer):
                 moves_dmg_multiplier,
                 moves_base_heal,
                 moves_base_status.flatten(order='C'),
-                [remaining_mon_team, remaining_mon_opponent],   
+                [remaining_mon_team, remaining_mon_opponent],
             ]
         )
 

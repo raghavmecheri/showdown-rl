@@ -21,7 +21,7 @@ def run_dqn(config, config_name):
     (opponent, second_opponent) = config
 
     model = Sequential([
-    	Dense(128, activation="elu", input_shape=(1, 10)),
+    	Dense(128, activation="elu", input_shape=(1, 38)),
     	Flatten(),
     	Dense(64, activation="elu"),
     	Dense(len(env_player.action_space), activation="linear")
@@ -41,5 +41,5 @@ def run_dqn(config, config_name):
     gamma = 0.5
 
     exp = DeepQLearning(env_player, opponent, second_opponent, model, policy, memory, opt, metrics, gamma, WandbLogger)
-    exp.train(10000)
+    exp.train(20000)
     exp.eval(100)
