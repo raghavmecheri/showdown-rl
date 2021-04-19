@@ -88,3 +88,4 @@ class RandomizedMaxDamagePlayer(RandomPlayer):
             return self.create_order(best_move)
         else:
             return self.choose_random_move(battle)
+
