@@ -84,7 +84,7 @@ class MaxDamagePlayer(RandomPlayer):
 
 class RandomizedMaxDamagePlayer(RandomPlayer):
     def choose_move(self, battle):
-        epsilon = 0.45
+        epsilon = 0.3
         if battle.available_moves:
             # Find the best move, but randomised
             if np.random.uniform() < epsilon:
@@ -109,23 +109,23 @@ class Minimax:
                 return val
 
             if is_maxer:
-                best_val = -1
+                best_val = - float('inf')
                 for move in scores:
-                    val = minimax(val, scores, opp_scores, max_depth, depth + 1, False)
+                    val = minimax(val + move, scores, opp_scores, max_depth, depth + 1, False)
                     best_val = max(best_val, value)
-                best_val
+                return best_val
 
             else:
                 best_val = float('inf')
                 for move in opp_scores:
-                    val = minimax(val, scores, opp_scores, max_depth, depth + 1, True)
+                    val = minimax(val + move, scores, opp_scores, max_depth, depth + 1, True)
                     best_val = min(val, best_val)
                 return best_val
 
         best_val, best_move = -1, -1
 
         for i in range(self.moves_scored):
-            val = minimax(0, self.moves_scored, self.opp_moves_scored, depth, 0, True)
+            val = minimax(self.moves_scored[i], self.moves_scored, self.opp_moves_scored, depth, 0, True)
             if val > best_val:
                 best_val, best_move = val, i
 
@@ -143,4 +143,22 @@ class MinimaxPlayer(RandomPlayer):
             return self.create_order(best_move)
         else:
             return self.choose_random_move(battle)
+
+class RandomisedMinimaxPlayer(RandomPlayer):
+    def play_minimax(self, my_moves, opp_moves, depth=5):
+         opp_movelist = [opp_moves[k] for k in opp_moves]
+         player = Minimax(my_moves, opp_movelist)
+         return player.play_best_move(depth)
+
+     def choose_move(self, battle):
+         if battle.available_moves:
+             epsilon = 0.3
+             # Find the best move, but randomised
+             if np.random.uniform() < epsilon:
+                 return self.choose_random_move(battle)
+
+             best_move = self.play_minimax(battle.available_moves, battle.opponent_active_pokemon.moves)
+             return self.create_order(best_move)
+         else:
+             return self.choose_random_move(battle)
 
