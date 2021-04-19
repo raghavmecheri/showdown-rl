@@ -3,7 +3,7 @@ import numpy as np
 import tensorflow as tf
 
 from poke_env.player.random_player import RandomPlayer
-from players import SimpleRLPlayer, MaxDamagePlayer, RandomizedMaxDamagePlayer, MiniMaxDamagePlayer, RandomizedMiniMaxDamagePlayer
+from players import SimpleRLPlayer, MaxDamagePlayer, RandomizedMaxDamagePlayer
 
 from runners import run_dqn
 
@@ -16,8 +16,6 @@ TRAIN_CONFIGS = {
     "rand": RandomPlayer(battle_format="gen8randombattle"),
     "max": MaxDamagePlayer(battle_format="gen8randombattle"),
     "maxrand": RandomizedMaxDamagePlayer(battle_format="gen8randombattle"),
-    "minimax": MiniMaxDamagePlayer(battle_format="gen8randombattle"),
-    "minimaxrand": RandomizedMiniMaxDamagePlayer(battle_format="gen8randombattle")
 }
 
 
