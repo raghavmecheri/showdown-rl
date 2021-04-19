@@ -89,3 +89,30 @@ class RandomizedMaxDamagePlayer(RandomPlayer):
         else:
             return self.choose_random_move(battle)
 
+class MinimaxPlayer(RandomPlayer):
+    def play_minimax(self, my_moves, opp_moves, depth=5):
+        print(my_moves)
+        print(opp_moves)
+        return max(my_moves, key=lambda move: move.base_power)
+    
+    def choose_move(self, battle):
+        if battle.available_moves:
+            # best_move = max(battle.available_moves, key=lambda move: move.base_power)
+            best_move = self.play_minimax(battle.available_moves, battle.opponent_active_pokemon.moves)
+            return self.create_order(best_move)
+        else:
+            return self.choose_random_move(battle)
+
+class RandomisedMinimaxPlayer(RandomPlayer):
+    def play_minimax(self, my_moves, opp_moves, depth=5):
+        print(my_moves)
+        print(opp_moves)
+        return max(my_moves, key=lambda move: move.base_power)
+    
+    def choose_move(self, battle):
+        if battle.available_moves:
+            # best_move = max(battle.available_moves, key=lambda move: move.base_power)
+            best_move = self.play_minimax(battle.available_moves, battle.opponent_active_pokemon.moves)
+            return self.create_order(best_move)
+        else:
+            return self.choose_random_move(battle)
