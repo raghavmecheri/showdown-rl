@@ -59,7 +59,7 @@ class SimpleRLPlayer(Gen8EnvSinglePlayer):
 
     def compute_reward(self, battle) -> float:
         return self.reward_computing_helper(
-            battle, fainted_value=2, hp_value=1, victory_value=30
+            battle, fainted_value=3, hp_value=1.5, status_value=0.75, victory_value=30
         )
 
 
