@@ -1,0 +1,14 @@
+Max - MaxRand ==> 58/100 || 60/100
+Max - Rand ==> 64/100 || 92/100
+
+MaxRand - MaxRand ==> 70/100 || 73/100
+MaxRand - Rand ==> 70/100 || 94/100
+
+Minimax - MaxRand ==> 73/100 || 61/100
+Minimax - Rand ==> 73/100 || 89/100
+
+MinimaxRand - MaxRand ==> 66/100 || 71/100
+MinimaxRand - Rand ==> 69/100 || 94/100
+
+Rand - MaxRand ==> 96/100 || 73/100
+Rand - Rand ==> 93/100 || 81/100
