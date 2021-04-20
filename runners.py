@@ -21,7 +21,7 @@ def run_dqn(config, config_name):
     (opponent, second_opponent) = config
 
     model = Sequential([
-    	Dense(128, activation="elu", input_shape=(1, 38)),
+    	Dense(128, activation="elu", input_shape=(1, 42)),
     	Flatten(),
     	Dense(64, activation="elu"),
     	Dense(len(env_player.action_space), activation="linear")

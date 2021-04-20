@@ -74,7 +74,7 @@ class MaxDamagePlayer(RandomPlayer):
         # If the player can attack, it will
         if battle.available_moves:
             # Finds the best move among available ones
-            best_move = max(battle.available_moves, key=lambda move: _score_move(move.base_power))
+            best_move = max(battle.available_moves, key=lambda move: _score_move(move))
             return self.create_order(best_move)
 
         # If no attack is available, a random switch will be made
@@ -90,7 +90,7 @@ class RandomizedMaxDamagePlayer(RandomPlayer):
             if np.random.uniform() < epsilon:
                 return self.choose_random_move(battle)
 
-            best_move = max(battle.available_moves, key=lambda move: _score_move(move.base_power))
+            best_move = max(battle.available_moves, key=lambda move: _score_move(move))
             return self.create_order(best_move)
         else:
             return self.choose_random_move(battle)
@@ -102,7 +102,7 @@ class Minimax:
         self.moves_scored = [_score_move(x) for x in moves]
         self.opp_moves_scored = [-1 * _score_move(x) for x in opp_moves]
 
-    def play_best_move(depth):
+    def play_best_move(self, depth):
 
         def minimax(val, scores, opp_scores, max_depth, depth, is_maxer):
             if depth == max_depth:
@@ -112,19 +112,19 @@ class Minimax:
                 best_val = - float('inf')
                 for move in scores:
                     val = minimax(val + move, scores, opp_scores, max_depth, depth + 1, False)
-                    best_val = max(best_val, value)
+                    best_val = max(best_val, val)
                 return best_val
 
             else:
                 best_val = float('inf')
                 for move in opp_scores:
                     val = minimax(val + move, scores, opp_scores, max_depth, depth + 1, True)
-                    best_val = min(val, best_val)
+                    best_val = min(best_val, val)
                 return best_val
 
-        best_val, best_move = -1, -1
+        best_val, best_move = -float('inf'), -1
 
-        for i in range(self.moves_scored):
+        for i in range(len(self.moves_scored)):
             val = minimax(self.moves_scored[i], self.moves_scored, self.opp_moves_scored, depth, 0, True)
             if val > best_val:
                 best_val, best_move = val, i
@@ -135,7 +135,8 @@ class MinimaxPlayer(RandomPlayer):
     def play_minimax(self, my_moves, opp_moves, depth=5):
         opp_movelist = [opp_moves[k] for k in opp_moves]
         player = Minimax(my_moves, opp_movelist)
-        return player.play_best_move(depth)
+        move = player.play_best_move(depth)
+        return move
 
     def choose_move(self, battle):
         if battle.available_moves:
@@ -144,12 +145,7 @@ class MinimaxPlayer(RandomPlayer):
         else:
             return self.choose_random_move(battle)
 
-class RandomisedMinimaxPlayer(RandomPlayer):
-    def play_minimax(self, my_moves, opp_moves, depth=5):
-         opp_movelist = [opp_moves[k] for k in opp_moves]
-         player = Minimax(my_moves, opp_movelist)
-         return player.play_best_move(depth)
-
+class RandomisedMinimaxPlayer(MinimaxPlayer):
      def choose_move(self, battle):
          if battle.available_moves:
              epsilon = 0.3
@@ -157,8 +153,6 @@ class RandomisedMinimaxPlayer(RandomPlayer):
              if np.random.uniform() < epsilon:
                  return self.choose_random_move(battle)
 
-             best_move = self.play_minimax(battle.available_moves, battle.opponent_active_pokemon.moves)
-             return self.create_order(best_move)
+             return super().choose_move(battle)
          else:
              return self.choose_random_move(battle)
-
